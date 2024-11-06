@@ -1,13 +1,37 @@
-import {Box, Container, Stack, Typography, Button} from '@mui/material'
+import { Box, Button, Container, Stack, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { MoviesService } from '../../services/movie-service';
+import { IMovie } from '../../@libs/types';
 
 function HighLightSection() {
+
+    const params= useParams();
+
+    const [movie, setMovies] = useState<IMovie>({} as IMovie);
+
+    useEffect(()=>{
+
+        const movieId = (params.id) ? params.id: "4b873811-6c0a-4b2e-a196-9b0b68ac631d"
+
+        if(params.id){
+            MoviesService.getMoviesById(movieId)
+            .then(result => {
+                if(result) setMovies(result);
+            })
+            .catch(error => {
+                console.log('PAU:', error)
+            })
+        }
+    },[params]);
+
     return(
         <Box>
             <Container>
                 <Stack
                     direction="row"
                 >
-                    <img src="assets/house-of-dragons-poster.jpg" />
+                    <img src={`assets/${movie.poster}`} />
                     <Stack
                         sx={{
                             justifyContent: 'center',
@@ -15,7 +39,7 @@ function HighLightSection() {
                         }}>
                         <Typography
                             variant="h4"
-                        >House of Dragons
+                        >{movie.title}
                         </Typography>
                         <Typography
                             variant="subtitle2"
@@ -28,7 +52,7 @@ function HighLightSection() {
                                     marginRight: '0.5rem',
                                     marginLeft: '0.2rem',
                                 }}>
-                                16
+                                {movie.ageRating}
                             </span>
                             Aventura, Fantasia, Ação</Typography>
                             <Typography
@@ -43,7 +67,7 @@ function HighLightSection() {
                             <Typography
                                 variant="body2"
                             >
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus, sequi perspiciatis voluptatem fuga accusantium tempore blanditiis, officia, maxime nihil iure id quasi quisquam rem corrupti animi aliquam quibusdam labore itaque.
+                                {movie.description}
                             </Typography>
                             <Stack
                                 direction="row"

@@ -3,7 +3,7 @@ import { Category } from "src/categories/category-entity";
 import { Movie } from "src/movies/movie-entity";
 import { MovieService } from "src/movies/movie-service";
 
-@Controller('Movies')
+@Controller('movies')
 export class MovieController {
 
     constructor(
